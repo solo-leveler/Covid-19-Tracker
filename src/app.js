@@ -3,10 +3,16 @@ import { Cards, Chart , CountryPicker } from './components';
 import styles  from './App.module.css';
 import { fetchData } from './api';
 import titleImage from './images/image.png'; 
+import { Paper ,Switch  } from '@material-ui/core';
+import {ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import TouchAppIcon from '@material-ui/icons/TouchApp';
+
+
 
 class App extends React.Component{
-
+           
     state = {
+        darkMode : false,
         data : {},
         country : '',
     }
@@ -21,16 +27,29 @@ class App extends React.Component{
         
     }
     render(){
-        const { data ,country } = this.state;
+        const { data ,country,darkMode } = this.state;
+        const theme = createMuiTheme ({
+            palette:{
+               type: darkMode ? "dark" : "light",
+            },
+          });
+  
         return(
-            <div className={styles.container}  >
-                <img className={styles.image} src={titleImage} alt="COVID-19" />
-                <Cards  data= {data} />
-                <CountryPicker handleCountryChange = {this.handleCountryChange}  />
-                <Chart  data={data} country ={country } />
-                
-            </div>
-        )
+            <ThemeProvider theme = { theme}>
+                <Paper>
+                    <div className={styles.container}  >
+                        <img className={styles.image} src={titleImage} alt="COVID-19" />
+                        <Switch checked ={darkMode} onChange = {() => this.setState({darkMode: !darkMode}) } />
+                        <TouchAppIcon />
+                        Check Out our Dark Mode Now 
+                        <Cards  data= {data} />
+                        <CountryPicker handleCountryChange = {this.handleCountryChange}  />
+                        <Chart  data={data} country ={country } />
+                        
+                   </div>
+                </Paper>
+            </ThemeProvider> 
+       )
     }
 }
 
